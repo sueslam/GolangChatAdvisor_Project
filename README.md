@@ -1,4 +1,4 @@
-# Golang_Project
+# Golang_Blog_API
 Build a REST API for a mini blog with:
 - Posts CRUD (create/read/update/delete)
 - Start with in-memory storage, then switch to SQLite/Postgres
