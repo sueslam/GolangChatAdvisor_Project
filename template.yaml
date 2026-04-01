@@ -1,1 +1,90 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: AI Advisor Session Service
 
+Globals:
+  Function:
+    Timeout: 10
+    MemorySize: 256
+    Runtime: provided.al2
+
+Resources:
+  CompanionApiFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: .
+      Handler: bootstrap
+      Environment:
+        Variables:
+          AWS_REGION: us-east-1
+          COMPANIONS_TABLE: !Ref AdvisorTable
+          SESSIONS_TABLE: !Ref SessionsTable
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref AdvisorsTable
+        - DynamoDBCrudPolicy:
+            TableName: !Ref SessionsTable
+      Events:
+        Health:
+          Type: Api
+          Properties:
+            Path: /health
+            Method: get
+        CreateCompanion:
+          Type: Api
+          Properties:
+            Path: /advisors
+            Method: post
+        GetCompanion:
+          Type: Api
+          Properties:
+            Path: /advisors/{id}
+            Method: get
+        CreateSession:
+          Type: Api
+          Properties:
+            Path: /sessions
+            Method: post
+        SendMessage:
+          Type: Api
+          Properties:
+            Path: /sessions/{id}/messages
+            Method: post
+        GetMessages:
+          Type: Api
+          Properties:
+            Path: /sessions/{id}/messages
+            Method: get
+
+  CompanionsTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: advisors
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: id
+          AttributeType: S
+      KeySchema:
+        - AttributeName: id
+          KeyType: HASH
+
+  SessionsTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: sessions
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: pk
+          AttributeType: S
+        - AttributeName: sk
+          AttributeType: S
+      KeySchema:
+        - AttributeName: pk
+          KeyType: HASH
+        - AttributeName: sk
+          KeyType: RANGE
+
+Outputs:
+  ApiUrl:
+    Description: API endpoint URL
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/"
