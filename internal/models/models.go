@@ -1,10 +1,11 @@
 package models
 
 /*
-	The structs define data models for advisors, sessions, and messages
-
+The structs define data models for advisors, sessions, and messages
 along with request/response formats and map to both JSON APIs and DynamoDB storage
 */
+
+// AI advisor attributes
 type Advisor struct {
 	ID        string `json:"id" dynamodbav:"id"`
 	Name      string `json:"name" dynamodbav:"name"`
@@ -15,6 +16,7 @@ type Advisor struct {
 }
 
 // Request sent by user to create avatar/advisor
+// Backend generates ID and sets timestamp
 type CreateAdvisorRequest struct {
 	Name     string `json:"name"`
 	Persona  string `json:"persona"`
@@ -28,11 +30,12 @@ type CreateSessionRequest struct {
 	UserID    string `json:"user_id"`
 }
 
+// User message content
 type SendMessageRequest struct {
 	Content string `json:"content"`
 }
 
-// Store session information on DynamoDB
+// Store session (one chat conversation) information/metadata about chat on DynamoDB
 // PK is Partition Key and SK is Sort Key needed to organize data in DynamoDB
 type SessionMeta struct {
 	PK          string `json:"-" dynamodbav:"pk"`
@@ -44,7 +47,8 @@ type SessionMeta struct {
 	ItemType    string `json:"item_type" dynamodbav:"item_type"`
 }
 
-// Actual message in Content
+// One message line inside the conversation
+// Actual content of a message
 // Role is whether it is user or ai advisor
 type Message struct {
 	PK        string `json:"-" dynamodbav:"pk"`

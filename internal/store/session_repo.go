@@ -11,11 +11,17 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb/types"
 )
 
+// DB Layer for chat session and messages
+// Save chat session/metadata, msgs/ individual texts and fetch chat session and messages
+// Handles conversation data
+
+// Contains which DB connection and table to use
 type SessionRepository struct {
 	client    *dynamodb.Client
 	tableName string
 }
 
+// Constructor to create new repository object
 func NewSessionRepository(client *dynamodb.Client, tableName string) *SessionRepository {
 	return &SessionRepository{
 		client:    client,
@@ -23,6 +29,8 @@ func NewSessionRepository(client *dynamodb.Client, tableName string) *SessionRep
 	}
 }
 
+// Save session metadata such as sessionID, userID, advisor, createTime etc. into DynamoDB
+// Basically create a new chat session in the DB
 func (r *SessionRepository) CreateSessionMeta(ctx context.Context, meta models.SessionMeta) error {
 	item, err := attributevalue.MarshalMap(meta)
 	if err != nil {
@@ -36,6 +44,9 @@ func (r *SessionRepository) CreateSessionMeta(ctx context.Context, meta models.S
 	return err
 }
 
+// Get session record for a particular ID
+// PK: e.g. SESSION#22 and META identifies the session metadata
+// all data for one session is grouped under the same pk and sk decides what kind of item it is
 func (r *SessionRepository) GetSessionMeta(ctx context.Context, sessionID string) (*models.SessionMeta, error) {
 	pk := "SESSION#" + sessionID
 
@@ -62,6 +73,7 @@ func (r *SessionRepository) GetSessionMeta(ctx context.Context, sessionID string
 	return &meta, nil
 }
 
+// Save one chat msg into dynamoDB
 func (r *SessionRepository) AddMessage(ctx context.Context, msg models.Message) error {
 	item, err := attributevalue.MarshalMap(msg)
 	if err != nil {
@@ -75,6 +87,10 @@ func (r *SessionRepository) AddMessage(ctx context.Context, msg models.Message) 
 	return err
 }
 
+// Fetch ALL msgs from ONE session
+// Get allitems where e.g. PK is SESSION#22 and SK starts with MSG#
+// This way it ONLY fetches msgs and NOT the session metadata
+// Return in ascending sortkey order (oldest msgs to newest)
 func (r *SessionRepository) ListMessages(ctx context.Context, sessionID string) ([]models.Message, error) {
 	pk := "SESSION#" + sessionID
 

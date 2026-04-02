@@ -6,7 +6,12 @@ import (
 	"github.com/aws/aws-lambda-go/events"
 )
 
+// API Response Helper, helps Lambda API return JSON consistently
+
+// Function builds an api response by taking in status code and payload
+// Returns APIGatewayProxyResponse and errors
 func jsonResponse(statusCode int, payload any) (events.APIGatewayProxyResponse, error) {
+	//Converts Go to Json
 	body, err := json.Marshal(payload)
 	if err != nil {
 		return events.APIGatewayProxyResponse{
