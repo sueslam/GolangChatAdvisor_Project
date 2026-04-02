@@ -7,12 +7,17 @@ import (
 	"GolangChatAdvisor_Project/internal/models"
 )
 
+//Mock AI for the app. Not using any LLM
+//Implements a lightweight responder that generates companion replies using simple keyword matching
+//and companion metadata acting as a mock model
+
 type Responder struct{}
 
 func NewResponder() *Responder {
 	return &Responder{}
 }
 
+// Take in AI personality, chat history and latest user input to return a string
 func (r *Responder) GenerateReply(companion models.Advisor, history []models.Message, userMessage string) string {
 	lower := strings.ToLower(userMessage)
 

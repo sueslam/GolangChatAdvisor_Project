@@ -3,9 +3,9 @@ module GolangChatAdvisor_Project
 
 go 1.24
 
-//Lambda → handles API requests (create session, send message)
-//DynamoDB → stores conversations/sessions
-//UUID → gives each session a unique ID
+//Lambda: handles API requests (create session, send message)
+//DynamoDB: stores conversations/sessions
+//UUID: gives each session a unique ID
 require (
 	github.com/aws/aws-sdk-go-v2 v1.41.5
 	github.com/aws/aws-sdk-go-v2/feature/dynamodb/attributevalue v1.19.0

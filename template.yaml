@@ -9,7 +9,7 @@ Globals:
     Runtime: provided.al2
 
 Resources:
-  CompanionApiFunction:
+  AdvisorApiFunction:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: .
@@ -17,7 +17,7 @@ Resources:
       Environment:
         Variables:
           AWS_REGION: us-east-1
-          COMPANIONS_TABLE: !Ref AdvisorTable
+          ADVISORS_TABLE: !Ref AdvisorTable
           SESSIONS_TABLE: !Ref SessionsTable
       Policies:
         - DynamoDBCrudPolicy:
