@@ -27,7 +27,7 @@ Tech Stack Used:
 
 Screenshots of chat advisor in action:
 ### CloudFormation Stack
-<img width="959" height="211" alt="image" src="https://github.com/user-attachments/assets/7a799236-6902-4030-a9fc-b990b10c9c88" />
+<img width="959" height="211" alt="image" src="https://github.com/user-attachments/assets/dc8b69f2-5179-490c-909d-bca0ace47442" />
 
 ### Health Check
 
