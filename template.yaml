@@ -1,6 +1,6 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
-Description: AI Advisor Session Service
+Description: Golang Chat Advisor Service
 
 Globals:
   Function:
@@ -17,11 +17,11 @@ Resources:
       Environment:
         Variables:
           AWS_REGION: us-east-1
-          ADVISORS_TABLE: !Ref AdvisorTable
+          ADVISORS_TABLE: !Ref CompanionsTable
           SESSIONS_TABLE: !Ref SessionsTable
       Policies:
         - DynamoDBCrudPolicy:
-            TableName: !Ref AdvisorsTable
+            TableName: !Ref CompanionsTable
         - DynamoDBCrudPolicy:
             TableName: !Ref SessionsTable
       Events:
@@ -55,6 +55,8 @@ Resources:
           Properties:
             Path: /sessions/{id}/messages
             Method: get
+    Metadata:
+      BuildMethod: makefile
 
   CompanionsTable:
     Type: AWS::DynamoDB::Table
