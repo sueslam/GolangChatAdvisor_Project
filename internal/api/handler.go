@@ -12,17 +12,17 @@ import (
 )
 
 type Handler struct {
-	companionService *service.CompanionService
-	sessionService   *service.SessionService
+	advisorService *service.AdvisorService
+	sessionService *service.SessionService
 }
 
 func NewHandler(
-	companionService *service.CompanionService,
+	advisorService *service.AdvisorService,
 	sessionService *service.SessionService,
 ) *Handler {
 	return &Handler{
-		companionService: companionService,
-		sessionService:   sessionService,
+		advisorService: advisorService,
+		sessionService: sessionService,
 	}
 }
 
@@ -34,11 +34,11 @@ func (h *Handler) HandleRequest(ctx context.Context, req events.APIGatewayProxyR
 	case method == "GET" && path == "/health":
 		return jsonResponse(200, map[string]string{"status": "ok"})
 
-	case method == "POST" && path == "/companions":
-		return h.createCompanion(ctx, req)
+	case method == "POST" && path == "/advisors":
+		return h.createAdvisor(ctx, req)
 
-	case method == "GET" && strings.HasPrefix(path, "/companions/"):
-		return h.getCompanion(ctx, req)
+	case method == "GET" && strings.HasPrefix(path, "/advisors/"):
+		return h.getAdvisor(ctx, req)
 
 	case method == "POST" && path == "/sessions":
 		return h.createSession(ctx, req)
@@ -54,32 +54,32 @@ func (h *Handler) HandleRequest(ctx context.Context, req events.APIGatewayProxyR
 	}
 }
 
-func (h *Handler) createCompanion(ctx context.Context, req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
+func (h *Handler) createAdvisor(ctx context.Context, req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	var body models.CreateAdvisorRequest
 	if err := json.Unmarshal([]byte(req.Body), &body); err != nil {
 		return errorResponse(400, "invalid request body")
 	}
 
-	companion, err := h.companionService.CreateCompanion(ctx, body)
+	advisor, err := h.advisorService.CreateAdvisor(ctx, body)
 	if err != nil {
 		return errorResponse(400, err.Error())
 	}
 
-	return jsonResponse(201, companion)
+	return jsonResponse(201, advisor)
 }
 
-func (h *Handler) getCompanion(ctx context.Context, req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
-	id := strings.TrimPrefix(req.Path, "/companions/")
+func (h *Handler) getAdvisor(ctx context.Context, req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
+	id := strings.TrimPrefix(req.Path, "/advisors/")
 
-	companion, err := h.companionService.GetCompanion(ctx, id)
+	advisor, err := h.advisorService.GetAdvisor(ctx, id)
 	if err != nil {
 		return errorResponse(400, err.Error())
 	}
-	if companion == nil {
-		return errorResponse(404, "companion not found")
+	if advisor == nil {
+		return errorResponse(404, "advisor not found")
 	}
 
-	return jsonResponse(200, companion)
+	return jsonResponse(200, advisor)
 }
 
 func (h *Handler) createSession(ctx context.Context, req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
@@ -90,7 +90,7 @@ func (h *Handler) createSession(ctx context.Context, req events.APIGatewayProxyR
 
 	session, err := h.sessionService.StartSession(ctx, body)
 	if err != nil {
-		if err.Error() == "companion not found" {
+		if err.Error() == "advisor not found" {
 			return errorResponse(404, err.Error())
 		}
 		return errorResponse(400, err.Error())
@@ -112,7 +112,7 @@ func (h *Handler) sendMessage(ctx context.Context, req events.APIGatewayProxyReq
 
 	resp, err := h.sessionService.SendMessage(ctx, sessionID, body)
 	if err != nil {
-		if err.Error() == "session not found" || err.Error() == "companion not found" {
+		if err.Error() == "session not found" || err.Error() == "advisor not found" {
 			return errorResponse(404, err.Error())
 		}
 		return errorResponse(400, err.Error())

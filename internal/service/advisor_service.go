@@ -11,20 +11,20 @@ import (
 	"github.com/google/uuid"
 )
 
-type CompanionService struct {
+type AdvisorService struct {
 	repo *store.AdvisorRepository
 }
 
-func NewCompanionService(repo *store.AdvisorRepository) *CompanionService {
-	return &CompanionService{repo: repo}
+func NewAdvisorService(repo *store.AdvisorRepository) *AdvisorService {
+	return &AdvisorService{repo: repo}
 }
 
-func (s *CompanionService) CreateCompanion(ctx context.Context, req models.CreateAdvisorRequest) (*models.Advisor, error) {
+func (s *AdvisorService) CreateAdvisor(ctx context.Context, req models.CreateAdvisorRequest) (*models.Advisor, error) {
 	if req.Name == "" || req.Persona == "" || req.Style == "" || req.Greeting == "" {
-		return nil, errors.New("all companion fields are required")
+		return nil, errors.New("all advisor fields are required")
 	}
 
-	companion := models.Advisor{
+	advisor := models.Advisor{
 		ID:        "comp_" + uuid.NewString(),
 		Name:      req.Name,
 		Persona:   req.Persona,
@@ -33,16 +33,16 @@ func (s *CompanionService) CreateCompanion(ctx context.Context, req models.Creat
 		CreatedAt: time.Now().UTC().Format(time.RFC3339),
 	}
 
-	if err := s.repo.CreateAdvisor(ctx, companion); err != nil {
+	if err := s.repo.CreateAdvisor(ctx, advisor); err != nil {
 		return nil, err
 	}
 
-	return &companion, nil
+	return &advisor, nil
 }
 
-func (s *CompanionService) GetCompanion(ctx context.Context, id string) (*models.Advisor, error) {
+func (s *AdvisorService) GetAdvisor(ctx context.Context, id string) (*models.Advisor, error) {
 	if id == "" {
-		return nil, errors.New("companion id is required")
+		return nil, errors.New("Advisor id is required")
 	}
 
 	return s.repo.GetAdvisorByID(ctx, id)

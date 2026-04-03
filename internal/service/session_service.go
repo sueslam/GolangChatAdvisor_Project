@@ -13,47 +13,47 @@ import (
 )
 
 type SessionService struct {
-	companionRepo *store.AdvisorRepository
-	sessionRepo   *store.SessionRepository
-	responder     *ai.Responder
+	advisorRepo *store.AdvisorRepository
+	sessionRepo *store.SessionRepository
+	responder   *ai.Responder
 }
 
 func NewSessionService(
-	companionRepo *store.AdvisorRepository,
+	advisorRepo *store.AdvisorRepository,
 	sessionRepo *store.SessionRepository,
 	responder *ai.Responder,
 ) *SessionService {
 	return &SessionService{
-		companionRepo: companionRepo,
-		sessionRepo:   sessionRepo,
-		responder:     responder,
+		advisorRepo: advisorRepo,
+		sessionRepo: sessionRepo,
+		responder:   responder,
 	}
 }
 
 func (s *SessionService) StartSession(ctx context.Context, req models.CreateSessionRequest) (*models.SessionMeta, error) {
 	if req.AdvisorID == "" || req.UserID == "" {
-		return nil, errors.New("companion_id and user_id are required")
+		return nil, errors.New("advisor_id and user_id are required")
 	}
 
-	companion, err := s.companionRepo.GetAdvisorByID(ctx, req.AdvisorID)
+	advisor, err := s.advisorRepo.GetAdvisorByID(ctx, req.AdvisorID)
 	if err != nil {
 		return nil, err
 	}
-	if companion == nil {
-		return nil, errors.New("companion not found")
+	if advisor == nil {
+		return nil, errors.New("advisor not found")
 	}
 
 	sessionID := "sess_" + uuid.NewString()
 	now := time.Now().UTC().Format(time.RFC3339Nano)
 
 	meta := models.SessionMeta{
-		PK:          "SESSION#" + sessionID,
-		SK:          "META",
-		SessionID:   sessionID,
-		CompanionID: req.AdvisorID,
-		UserID:      req.UserID,
-		CreatedAt:   now,
-		ItemType:    "session_meta",
+		PK:        "SESSION#" + sessionID,
+		SK:        "META",
+		SessionID: sessionID,
+		AdvisorID: req.AdvisorID,
+		UserID:    req.UserID,
+		CreatedAt: now,
+		ItemType:  "session_meta",
 	}
 
 	if err := s.sessionRepo.CreateSessionMeta(ctx, meta); err != nil {
@@ -65,7 +65,7 @@ func (s *SessionService) StartSession(ctx context.Context, req models.CreateSess
 		SK:        "MSG#" + now,
 		SessionID: sessionID,
 		Role:      "assistant",
-		Content:   companion.Greeting,
+		Content:   advisor.Greeting,
 		Timestamp: now,
 		ItemType:  "message",
 	}
@@ -93,12 +93,12 @@ func (s *SessionService) SendMessage(ctx context.Context, sessionID string, req 
 		return nil, errors.New("session not found")
 	}
 
-	companion, err := s.companionRepo.GetAdvisorByID(ctx, meta.CompanionID)
+	advisor, err := s.advisorRepo.GetAdvisorByID(ctx, meta.AdvisorID)
 	if err != nil {
 		return nil, err
 	}
-	if companion == nil {
-		return nil, errors.New("companion not found")
+	if advisor == nil {
+		return nil, errors.New("advisor not found")
 	}
 
 	userTS := time.Now().UTC().Format(time.RFC3339Nano)
@@ -121,7 +121,7 @@ func (s *SessionService) SendMessage(ctx context.Context, sessionID string, req 
 		return nil, err
 	}
 
-	reply := s.responder.GenerateReply(*companion, history, req.Content)
+	reply := s.responder.GenerateReply(*advisor, history, req.Content)
 
 	assistantTS := time.Now().UTC().Add(1 * time.Millisecond).Format(time.RFC3339Nano)
 	assistantMsg := models.Message{
