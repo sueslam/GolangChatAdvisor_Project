@@ -37,4 +37,9 @@ Screenshots of chat advisor in action:
 
 <img width="1809" height="191" alt="image" src="https://github.com/user-attachments/assets/9e9e03f2-2905-4d17-baa0-500fcbb8097a" />
 
-### 
+### Create Session
+<img width="883" height="129" alt="image" src="https://github.com/user-attachments/assets/d9997d2c-488e-4cc9-ac32-9fe9179b7458" />
+
+### Send Message
+<img width="906" height="128" alt="image" src="https://github.com/user-attachments/assets/f6292185-b15c-4822-b919-fe73aabed077" />
+
