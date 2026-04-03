@@ -8,9 +8,15 @@ The goal of this project is to showcase backend design, session handling, API de
 - fetch session history
 
 Tech Stack Used: 
-- Go: Backend code to handle requests, process logic and responses. Also talks to DynamoDB
-- AWS Lambda: For quick and easy serverless deployment. Executes code only when requests come and stops after a time interval.  
-- API Gateway: Comes before Lambda. Receives HTTP requests from user and sends them to Lambda. Also retrieves response.
-- DynamoDB: Uses 2 tables. One for advisors created and one for chat sessions and messages
-- AWS SAM: Builds cloud setup using template.yaml. Creates Lambda, API Gateway and DynamoDB tables
-- GitHub Actions: CICD tool to build code and deploy to AWS. Runs on every push (for now)
+- Go
+  - Backend code to handle requests, process logic and responses. Also talks to DynamoDB
+- AWS Lambda
+  - For quick and easy serverless deployment. Executes code only when requests come and stops after a time interval.  
+- API Gateway
+  - Comes before Lambda. Receives HTTP requests from user and sends them to Lambda. Also retrieves response.
+- DynamoDB
+  - Uses 2 tables. One for advisors created and one for chat sessions and messages
+- AWS SAM
+  - Builds cloud setup using template.yaml. Creates Lambda, API Gateway and DynamoDB tables
+- GitHub Actions
+  - CICD tool to build code and deploy to AWS. Runs on every push (for now)
