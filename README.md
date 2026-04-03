@@ -26,6 +26,8 @@ Tech Stack Used:
   - CICD tool to build code and deploy to AWS. Runs on every push (for now)
 
 Screenshots of chat advisor in action:
+### CloudFormation Stack
+<img width="959" height="211" alt="image" src="https://github.com/user-attachments/assets/7a799236-6902-4030-a9fc-b990b10c9c88" />
 
 ### Health Check
 
