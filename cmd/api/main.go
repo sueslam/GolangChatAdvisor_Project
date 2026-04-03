@@ -29,15 +29,15 @@ func main() {
 
 	dynamoClient := dynamodb.NewFromConfig(awsCfg)
 
-	companionRepo := store.NewAdvisorRepository(dynamoClient, cfg.AdvisorsTable)
+	advisorRepo := store.NewAdvisorRepository(dynamoClient, cfg.AdvisorsTable)
 	sessionRepo := store.NewSessionRepository(dynamoClient, cfg.SessionsTable)
 
 	responder := ai.NewResponder()
 
-	companionService := service.NewCompanionService(companionRepo)
-	sessionService := service.NewSessionService(companionRepo, sessionRepo, responder)
+	advisorService := service.NewAdvisorService(advisorRepo)
+	sessionService := service.NewSessionService(advisorRepo, sessionRepo, responder)
 
-	handler := api.NewHandler(companionService, sessionService)
+	handler := api.NewHandler(advisorService, sessionService)
 
 	lambda.Start(handler.HandleRequest)
 }
