@@ -27,6 +27,12 @@ Tech Stack Used:
 
 Screenshots of chat advisor in action:
 
+### Health Check
+
+<img width="549" height="29" alt="image" src="https://github.com/user-attachments/assets/c6afeee4-1408-4b22-bc2a-867e004aa2bd" />
+
 ### Post request for advisor
 
 <img width="1809" height="191" alt="image" src="https://github.com/user-attachments/assets/9e9e03f2-2905-4d17-baa0-500fcbb8097a" />
+
+### 
