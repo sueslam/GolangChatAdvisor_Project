@@ -16,7 +16,6 @@ Resources:
       Handler: bootstrap
       Environment:
         Variables:
-          AWS_REGION: us-east-1
           ADVISORS_TABLE: !Ref CompanionsTable
           SESSIONS_TABLE: !Ref SessionsTable
       Policies:
