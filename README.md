@@ -3,7 +3,7 @@ Build a backend service to create an AI advisor where client can create a chat a
 The goal of this project is to showcase backend design, session handling, API design and AWS deployment.
 
 *Pls note it is not using a real LLM and is only using mocked logic/ responses from advisors.
-The purpose of this project is to demonstrate backend architecture, system design, session handling, API design and play around with AWS services for infra/deployment.
+The purpose of this project is to demonstrate backend architecture, system design, session handling, API design and play around with AWS services for infra/deployment for learning purposes.
  
 Users can:
 - create a companion
