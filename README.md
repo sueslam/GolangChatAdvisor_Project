@@ -24,3 +24,9 @@ Tech Stack Used:
   - Builds cloud setup using template.yaml. Creates Lambda, API Gateway and DynamoDB tables
 - GitHub Actions
   - CICD tool to build code and deploy to AWS. Runs on every push (for now)
+
+Screenshots of chat advisor in action:
+
+### Post request for advisor
+
+<img width="1809" height="191" alt="image" src="https://github.com/user-attachments/assets/9e9e03f2-2905-4d17-baa0-500fcbb8097a" />
